@@ -1,16 +1,19 @@
 package guru.springframework.spring5webapp.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 public class Author {
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String firstName;
     private String lastName;
 
+    @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
 
     public Author(){
@@ -22,10 +25,18 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public Author(String firstName, String lastName, set<bool> books){
+    public Author(String firstName, String lastName, Set<Book> books){
         this.firstName= firstName;
         this.lastName = lastName;
         this.books = books;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setFirstName(String firstName) {
@@ -36,7 +47,7 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public void setBooks(set<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 
@@ -48,7 +59,30 @@ public class Author {
         return lastName;
     }
 
-    public set<Book> getBooks() {
+    public Set<Book> getBooks() {
         return books;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Author author = (Author) o;
+        return id == author.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", books=" + books +
+                '}';
     }
 }
